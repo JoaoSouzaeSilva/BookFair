@@ -1,6 +1,7 @@
 package com.bookfair.controller
 
 import com.bookfair.controller.request.PostCustomerRequest
+import com.bookfair.controller.request.PutCustomerRequest
 import com.bookfair.model.CustomerModel
 import jakarta.websocket.server.PathParam
 import org.springframework.http.HttpStatus
@@ -37,7 +38,11 @@ class CustomerController {
     }
 
     @PutMapping("/{id}")
-    fun updateCustomer(@PathVariable id: String, @RequestBody customer: PostCustomerRequest) {
-        customers.first { it.id == id }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun updateCustomer(@PathVariable id: String, @RequestBody customer: PutCustomerRequest) {
+        customers.first { it.id == id }.let {
+            it.name = customer.name
+            it.email = customer.email
+        }
     }
 }
