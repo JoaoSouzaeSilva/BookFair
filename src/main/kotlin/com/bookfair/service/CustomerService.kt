@@ -3,13 +3,16 @@ package com.bookfair.service
 import com.bookfair.controller.request.PostCustomerRequest
 import com.bookfair.controller.request.PutCustomerRequest
 import com.bookfair.model.CustomerModel
+import com.bookfair.repository.CustomerRepository
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 
 @Service
-class CustomerService    {
+class CustomerService(
+    val customerRepository: CustomerRepository
+) {
 
     var customers = mutableListOf<CustomerModel>()
 
@@ -21,15 +24,7 @@ class CustomerService    {
     }
 
     fun createCustomer(customer: CustomerModel) {
-        val newId = if (customers.isEmpty()) {
-            1
-        } else {
-            customers.last().id!!.toInt() + 1
-        }
-
-        customer.id = newId;
-
-        customers.add(customer)
+        customerRepository.save(customer)
     }
 
     fun getCustomer(id: Int): CustomerModel {
