@@ -25,14 +25,14 @@ class CustomerService    {
             1
         } else {
             customers.last().id!!.toInt() + 1
-        }.toString()
+        }
 
         customer.id = newId;
 
         customers.add(customer)
     }
 
-    fun getCustomer(id: String): CustomerModel {
+    fun getCustomer(id: Int): CustomerModel {
         return customers.first { it.id == id }
     }
 
@@ -43,7 +43,7 @@ class CustomerService    {
         }
     }
 
-    fun deleteCustomer(id: String) {
+    fun deleteCustomer(id: Int) {
         customers.removeIf { it.id == id }
     }
 
