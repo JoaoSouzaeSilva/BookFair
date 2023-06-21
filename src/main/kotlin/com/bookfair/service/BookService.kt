@@ -1,5 +1,6 @@
 package com.bookfair.service
 
+import com.bookfair.enums.BookStatus
 import com.bookfair.model.BookModel
 import com.bookfair.repository.BookRepository
 import org.springframework.stereotype.Service
@@ -10,6 +11,14 @@ class BookService(
 ) {
     fun create(book: BookModel) {
         bookRepository.save(book)
+    }
+
+    fun findAll(): List<BookModel> {
+        return bookRepository.findAll().toList()
+    }
+
+    fun findAllActive(): List<BookModel> {
+        return bookRepository.findByStatus(BookStatus.ACTIVE)
     }
 
 }
