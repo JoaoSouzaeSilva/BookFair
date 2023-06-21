@@ -1,5 +1,6 @@
 package com.bookfair.service
 
+import com.bookfair.controller.request.PutBookRequest
 import com.bookfair.enums.BookStatus
 import com.bookfair.model.BookModel
 import com.bookfair.repository.BookRepository
@@ -30,6 +31,10 @@ class BookService(
 
         book.status = BookStatus.DELETED
 
+        updateBook(book)
+    }
+
+    fun updateBook(book: BookModel) {
         bookRepository.save(book)
     }
 

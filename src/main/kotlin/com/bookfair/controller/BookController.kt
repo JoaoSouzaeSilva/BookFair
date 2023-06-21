@@ -1,6 +1,7 @@
 package com.bookfair.controller
 
 import com.bookfair.controller.request.PostBookRequest
+import com.bookfair.controller.request.PutBookRequest
 import com.bookfair.extension.toBookModel
 import com.bookfair.model.BookModel
 import com.bookfair.service.BookService
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -47,7 +49,14 @@ class BookController(
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteBook(@PathVariable id: Int) {
-        return bookService.deleteBook(id)
+        bookService.deleteBook(id)
+    }
+
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun updateBook(@PathVariable id: Int, @RequestBody book: PutBookRequest) {
+        val bookSaved = bookService.findBookById(id)
+        bookService.updateBook(book.toBookModel(bookSaved))
     }
 
 

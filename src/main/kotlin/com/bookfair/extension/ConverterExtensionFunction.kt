@@ -2,6 +2,7 @@ package com.bookfair.extension
 
 import com.bookfair.controller.request.PostBookRequest
 import com.bookfair.controller.request.PostCustomerRequest
+import com.bookfair.controller.request.PutBookRequest
 import com.bookfair.controller.request.PutCustomerRequest
 import com.bookfair.enums.BookStatus
 import com.bookfair.model.BookModel
@@ -28,5 +29,15 @@ fun PostBookRequest.toBookModel(customer: CustomerModel): BookModel {
         price = this.price,
         status = BookStatus.ACTIVE,
         customer = customer
+    )
+}
+
+fun PutBookRequest.toBookModel(previousValue: BookModel): BookModel {
+    return BookModel(
+        id = previousValue.id,
+        name = this.name ?: previousValue.name,
+        price = this.price ?: previousValue.price,
+        status = previousValue.status,
+        customer = previousValue.customer
     )
 }
