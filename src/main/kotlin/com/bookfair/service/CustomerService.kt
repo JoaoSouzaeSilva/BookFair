@@ -28,18 +28,23 @@ class CustomerService(
     }
 
     fun getCustomer(id: Int): CustomerModel {
-        return customers.first { it.id == id }
+        return customerRepository.findById(id).get()
     }
 
     fun updateCustomer(customer: CustomerModel) {
-        customers.first { it.id == customer.id }.let {
-            it.name = customer.name
-            it.email = customer.email
+        if(!customerRepository.existsById(customer.id!!)) {
+            throw Exception()
         }
+
+        customerRepository.save(customer)
     }
 
     fun deleteCustomer(id: Int) {
-        customers.removeIf { it.id == id }
+        if(!customerRepository.existsById(id)) {
+            throw Exception()
+        }
+
+        customerRepository.deleteById(id)
     }
 
 }
