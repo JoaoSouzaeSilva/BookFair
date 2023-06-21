@@ -21,4 +21,8 @@ class BookService(
         return bookRepository.findByStatus(BookStatus.ACTIVE)
     }
 
+    fun findBookById(id: Int): BookModel {
+        return bookRepository.findById(id).orElseThrow()
+    }
+
 }
