@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("customers")
 class CustomerController {
 
+    val customers = ;
+
     @GetMapping
     fun getCustomer(): CustomerModel {
         return CustomerModel("1","João","joao@gmail.com")
