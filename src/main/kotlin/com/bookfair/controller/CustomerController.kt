@@ -2,6 +2,7 @@ package com.bookfair.controller
 
 import com.bookfair.controller.request.PostCustomerRequest
 import com.bookfair.model.CustomerModel
+import jakarta.websocket.server.PathParam
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
@@ -13,7 +14,7 @@ class CustomerController {
     var customers = mutableListOf<CustomerModel>()
 
     @GetMapping
-    fun getCustomer(): List<CustomerModel> {
+    fun getAll(): List<CustomerModel> {
         return customers
     }
 
@@ -28,5 +29,10 @@ class CustomerController {
 
         customers.add(CustomerModel(newId, customer.name, customer.email))
         println(customer)
+    }
+
+    @GetMapping("/{id}")
+    fun getCustomer(@PathVariable id: String): CustomerModel {
+        return customers.filter { it.id == id }.first()
     }
 }
