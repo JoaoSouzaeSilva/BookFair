@@ -20,10 +20,11 @@ class CustomerController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createCustomer(@RequestBody customer: PostCustomerRequest) {
-        var newId = if (customers.isEmpty())
-                        "1"
-                    else
-                        customers.last().id + 1
+        val newId = if (customers.isEmpty()) {
+            1
+        } else {
+            customers.last().id.toInt() + 1
+        }.toString()
 
         customers.add(CustomerModel(newId, customer.name, customer.email))
         println(customer)
