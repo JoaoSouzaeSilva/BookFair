@@ -3,54 +3,40 @@ package com.bookfair.controller
 import com.bookfair.controller.request.PostCustomerRequest
 import com.bookfair.controller.request.PutCustomerRequest
 import com.bookfair.model.CustomerModel
-import jakarta.websocket.server.PathParam
+import com.bookfair.service.CustomerService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import java.util.UUID
 
 @RestController
 @RequestMapping("customers")
-class CustomerController {
-
-    var customers = mutableListOf<CustomerModel>()
+class CustomerController(
+        val customerService: CustomerService
+) {
 
     @GetMapping
     fun getAll(@RequestParam name: String?): List<CustomerModel> {
-        name?.let {
-            return customers.filter { it.name.contains(name,true) }
-        }
-        return customers
+        return customerService.getAll(name)
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createCustomer(@RequestBody customer: PostCustomerRequest) {
-        val newId = if (customers.isEmpty()) {
-            1
-        } else {
-            customers.last().id.toInt() + 1
-        }.toString()
-
-        customers.add(CustomerModel(newId, customer.name, customer.email))
-        println(customer)
+        return customerService.createCustomer(customer)
     }
 
     @GetMapping("/{id}")
     fun getCustomer(@PathVariable id: String): CustomerModel {
-        return customers.first { it.id == id }
+        return customerService.getCustomer(id)
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun updateCustomer(@PathVariable id: String, @RequestBody customer: PutCustomerRequest) {
-        customers.first { it.id == id }.let {
-            it.name = customer.name
-            it.email = customer.email
-        }
+        return customerService.updateCustomer(id, customer)
     }
 
     @DeleteMapping("/{id}")
     fun deleteCustomer(@PathVariable id: String) {
-        customers.removeIf { it.id == id }
+        customerService.deleteCustomer(id)
     }
 }
