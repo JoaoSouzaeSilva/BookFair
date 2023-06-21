@@ -14,13 +14,11 @@ class CustomerService(
     val customerRepository: CustomerRepository
 ) {
 
-    var customers = mutableListOf<CustomerModel>()
-
     fun getAll(name: String?): List<CustomerModel> {
         name?.let {
-            return customers.filter { it.name.contains(name,true) }
+            return customerRepository.findByNameContaining(name)
         }
-        return customers
+        return customerRepository.findAll().toList()
     }
 
     fun createCustomer(customer: CustomerModel) {
