@@ -2,6 +2,7 @@ package com.bookfair.controller
 
 import com.bookfair.controller.request.PostCustomerRequest
 import com.bookfair.controller.request.PutCustomerRequest
+import com.bookfair.extension.toCustomerModel
 import com.bookfair.model.CustomerModel
 import com.bookfair.service.CustomerService
 import org.springframework.http.HttpStatus
@@ -21,7 +22,7 @@ class CustomerController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createCustomer(@RequestBody customer: PostCustomerRequest) {
-        return customerService.createCustomer(customer)
+        return customerService.createCustomer(customer.toCustomerModel())
     }
 
     @GetMapping("/{id}")
@@ -32,7 +33,7 @@ class CustomerController(
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun updateCustomer(@PathVariable id: String, @RequestBody customer: PutCustomerRequest) {
-        return customerService.updateCustomer(id, customer)
+        return customerService.updateCustomer(customer.toCustomerModel(id))
     }
 
     @DeleteMapping("/{id}")
