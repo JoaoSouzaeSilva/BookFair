@@ -25,4 +25,12 @@ class BookService(
         return bookRepository.findById(id).orElseThrow()
     }
 
+    fun deleteBook(id: Int) {
+        val book = findBookById(id)
+
+        book.status = BookStatus.DELETED
+
+        bookRepository.save(book)
+    }
+
 }
