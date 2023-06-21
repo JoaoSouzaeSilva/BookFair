@@ -13,6 +13,8 @@ class BookController(
 ) {
 
     @PostMapping
-    fun create(@RequestBody request: PostBookRequest)
+    fun create(@RequestBody request: PostBookRequest) {
+
+    }
 
 }
