@@ -2,6 +2,7 @@ package com.bookfair.controller
 
 import com.bookfair.controller.request.PostCustomerRequest
 import com.bookfair.model.CustomerModel
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -14,6 +15,7 @@ class CustomerController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     fun createCustomer(@RequestBody customer: PostCustomerRequest): PostCustomerRequest {
         return customer
     }
