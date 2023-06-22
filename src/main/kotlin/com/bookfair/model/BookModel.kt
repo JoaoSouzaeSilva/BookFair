@@ -1,6 +1,8 @@
 package com.bookfair.model
 
 import com.bookfair.enums.BookStatus
+import com.bookfair.enums.Errors
+import com.bookfair.exception.BadRequestException
 import jakarta.persistence.*
 import java.math.BigDecimal
 
@@ -26,7 +28,7 @@ data class BookModel(
     var status: BookStatus? = null
         set(value) {
             if(field == BookStatus.CANCELED || field == BookStatus.DELETED)
-                throw Exception("Not possible to change a book with status $field")
+                throw BadRequestException(Errors.BF102.message.format(field), Errors.BF102.code)
             field = value
         }
 
