@@ -1,12 +1,14 @@
 package com.bookfair.service
 
 import com.bookfair.enums.BookStatus
+import com.bookfair.exception.NotFoundException
 import com.bookfair.model.BookModel
 import com.bookfair.model.CustomerModel
 import com.bookfair.repository.BookRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import java.net.http.HttpResponse
 
 @Service
 class BookService(
@@ -25,7 +27,7 @@ class BookService(
     }
 
     fun findBookById(id: Int): BookModel {
-        return bookRepository.findById(id).orElseThrow()
+        return bookRepository.findById(id).orElseThrow{ NotFoundException("Book [$id] does not exist", "BF-0002") }
     }
 
     fun deleteBook(id: Int) {
