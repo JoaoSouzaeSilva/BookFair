@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam
 
 @Service
 class CustomerService(
-    val customerRepository: CustomerRepository
+    val customerRepository: CustomerRepository,
+    val bookService: BookService
 ) {
 
     fun getAll(name: String?): List<CustomerModel> {
@@ -38,10 +39,9 @@ class CustomerService(
     }
 
     fun deleteCustomer(id: Int) {
-        if(!customerRepository.existsById(id)) {
-            throw Exception()
-        }
+        val customer = getCustomer(id)
 
+        bookService.deleteByCustomer(id)
         customerRepository.deleteById(id)
     }
 

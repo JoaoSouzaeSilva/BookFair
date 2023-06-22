@@ -38,4 +38,9 @@ class BookService(
         bookRepository.save(book)
     }
 
+    fun deleteByCustomer(id: Int) {
+        bookRepository.findByCustomer
+
+    }
+
 }
