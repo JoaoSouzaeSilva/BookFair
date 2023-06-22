@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotEmpty
 
 data class PutCustomerRequest (
 
-    @field:NotEmpty(message = "Name field must be not empty")
+    @field:NotEmpty(message = "Name field must not be empty")
     var name: String,
 
     @field:Email(message = "Email field must be a well formatted email address")
