@@ -6,6 +6,7 @@ import com.bookfair.controller.response.CustomerResponse
 import com.bookfair.extension.toCustomerModel
 import com.bookfair.extension.toResponse
 import com.bookfair.service.CustomerService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -22,7 +23,7 @@ class CustomerController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createCustomer(@RequestBody customer: PostCustomerRequest) {
+    fun createCustomer(@RequestBody @Valid customer: PostCustomerRequest) {
         return customerService.createCustomer(customer.toCustomerModel())
     }
 
