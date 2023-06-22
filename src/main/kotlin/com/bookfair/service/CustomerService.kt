@@ -1,15 +1,11 @@
 package com.bookfair.service
 
-import com.bookfair.controller.request.PostCustomerRequest
-import com.bookfair.controller.request.PutCustomerRequest
 import com.bookfair.enums.CustomerStatus
+import com.bookfair.enums.Errors
 import com.bookfair.exception.NotFoundException
 import com.bookfair.model.CustomerModel
 import com.bookfair.repository.CustomerRepository
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestParam
 
 @Service
 class CustomerService(
@@ -29,7 +25,7 @@ class CustomerService(
     }
 
     fun getCustomer(id: Int): CustomerModel {
-        return customerRepository.findById(id).orElseThrow{ NotFoundException("Customer with ID [$id] does not exist", "BF-0002") }
+        return customerRepository.findById(id).orElseThrow{ NotFoundException(Errors.BF201.message.format(id), Errors.BF201.code) }
     }
 
     fun updateCustomer(customer: CustomerModel) {

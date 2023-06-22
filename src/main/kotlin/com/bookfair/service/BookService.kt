@@ -9,7 +9,6 @@ import com.bookfair.repository.BookRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.net.http.HttpResponse
 
 @Service
 class BookService(
@@ -28,7 +27,7 @@ class BookService(
     }
 
     fun findBookById(id: Int): BookModel {
-        return bookRepository.findById(id).orElseThrow{ NotFoundException(Errors.ML0001.message.format(id), Errors.ML0001.code) }
+        return bookRepository.findById(id).orElseThrow{ NotFoundException(Errors.BF101.message.format(id), Errors.BF101.code) }
     }
 
     fun deleteBook(id: Int) {
