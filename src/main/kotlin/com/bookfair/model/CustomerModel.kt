@@ -1,11 +1,7 @@
 package com.bookfair.model
 
 import com.bookfair.enums.CustomerStatus
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
+import jakarta.persistence.*
 
 @Entity(name="customer")
 data class CustomerModel(
@@ -21,5 +17,6 @@ data class CustomerModel(
     var email: String,
 
     @Column
+    @Enumerated(EnumType.STRING)
     var status: CustomerStatus
 )

@@ -2,6 +2,7 @@ package com.bookfair.service
 
 import com.bookfair.controller.request.PostCustomerRequest
 import com.bookfair.controller.request.PutCustomerRequest
+import com.bookfair.enums.CustomerStatus
 import com.bookfair.model.CustomerModel
 import com.bookfair.repository.CustomerRepository
 import org.springframework.stereotype.Service
@@ -40,9 +41,11 @@ class CustomerService(
 
     fun deleteCustomer(id: Int) {
         val customer = getCustomer(id)
-
         bookService.deleteByCustomer(customer)
-        customerRepository.deleteById(id)
+
+        customer.status = CustomerStatus.INACTIVE
+
+        customerRepository.save(customer)
     }
 
 }
