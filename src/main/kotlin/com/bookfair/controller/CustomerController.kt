@@ -2,8 +2,9 @@ package com.bookfair.controller
 
 import com.bookfair.controller.request.PostCustomerRequest
 import com.bookfair.controller.request.PutCustomerRequest
+import com.bookfair.controller.response.CustomerResponse
 import com.bookfair.extension.toCustomerModel
-import com.bookfair.model.CustomerModel
+import com.bookfair.extension.toResponse
 import com.bookfair.service.CustomerService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -15,8 +16,8 @@ class CustomerController(
 ) {
 
     @GetMapping
-    fun getAll(@RequestParam name: String?): List<CustomerModel> {
-        return customerService.getAll(name)
+    fun getAll(@RequestParam name: String?): List<CustomerResponse> {
+        return customerService.getAll(name).map { it.toResponse() }
     }
 
     @PostMapping
@@ -26,8 +27,8 @@ class CustomerController(
     }
 
     @GetMapping("/{id}")
-    fun getCustomer(@PathVariable id: Int): CustomerModel {
-        return customerService.getCustomer(id)
+    fun getCustomer(@PathVariable id: Int): CustomerResponse {
+        return customerService.getCustomer(id).toResponse()
     }
 
     @PutMapping("/{id}")

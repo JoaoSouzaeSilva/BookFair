@@ -2,7 +2,9 @@ package com.bookfair.controller
 
 import com.bookfair.controller.request.PostBookRequest
 import com.bookfair.controller.request.PutBookRequest
+import com.bookfair.controller.response.BookResponse
 import com.bookfair.extension.toBookModel
+import com.bookfair.extension.toResponse
 import com.bookfair.model.BookModel
 import com.bookfair.service.BookService
 import com.bookfair.service.CustomerService
@@ -33,8 +35,8 @@ class BookController(
 
     //Another way to represent the function.
     @GetMapping
-    fun findAll(): List<BookModel> =
-        bookService.findAll()
+    fun findAll(): List<BookResponse> =
+        bookService.findAll().map { it.toResponse() }
 
     @GetMapping("active")
     fun findAllActives(): List<BookModel> {
@@ -42,8 +44,8 @@ class BookController(
     }
 
     @GetMapping("{id}")
-    fun findBookById(@PathVariable id: Int): BookModel {
-        return bookService.findBookById(id)
+    fun findBookById(@PathVariable id: Int): BookResponse {
+        return bookService.findBookById(id).toResponse()
     }
 
     @DeleteMapping("{id}")
@@ -58,6 +60,4 @@ class BookController(
         val bookSaved = bookService.findBookById(id)
         bookService.updateBook(book.toBookModel(bookSaved))
     }
-
-
 }
