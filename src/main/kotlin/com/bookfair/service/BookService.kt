@@ -1,10 +1,11 @@
 package com.bookfair.service
 
-import com.bookfair.controller.request.PutBookRequest
 import com.bookfair.enums.BookStatus
 import com.bookfair.model.BookModel
 import com.bookfair.model.CustomerModel
 import com.bookfair.repository.BookRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -15,12 +16,12 @@ class BookService(
         bookRepository.save(book)
     }
 
-    fun findAll(): List<BookModel> {
-        return bookRepository.findAll().toList()
+    fun findAll(pageable: Pageable): Page<BookModel> {
+        return bookRepository.findAll(pageable)
     }
 
-    fun findAllActive(): List<BookModel> {
-        return bookRepository.findByStatus(BookStatus.ACTIVE)
+    fun findAllActive(pageable: Pageable): Page<BookModel> {
+        return bookRepository.findByStatus(BookStatus.ACTIVE, pageable)
     }
 
     fun findBookById(id: Int): BookModel {
