@@ -3,6 +3,7 @@ package com.bookfair.service
 import com.bookfair.controller.request.PutBookRequest
 import com.bookfair.enums.BookStatus
 import com.bookfair.model.BookModel
+import com.bookfair.model.CustomerModel
 import com.bookfair.repository.BookRepository
 import org.springframework.stereotype.Service
 
@@ -38,9 +39,15 @@ class BookService(
         bookRepository.save(book)
     }
 
-    fun deleteByCustomer(id: Int) {
-        bookRepository.findByCustomer
+    fun deleteByCustomer(customer: CustomerModel) {
+        val books = bookRepository.findByCustomer(customer)
 
+        for(book in books)
+            book.status = BookStatus.DELETED
+
+        bookRepository.saveAll(books)
     }
+
+
 
 }

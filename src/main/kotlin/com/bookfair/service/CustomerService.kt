@@ -41,7 +41,7 @@ class CustomerService(
     fun deleteCustomer(id: Int) {
         val customer = getCustomer(id)
 
-        bookService.deleteByCustomer(id)
+        bookService.deleteByCustomer(customer)
         customerRepository.deleteById(id)
     }
 
