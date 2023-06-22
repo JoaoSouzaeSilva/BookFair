@@ -1,5 +1,6 @@
 package com.bookfair.model
 
+import com.bookfair.enums.CustomerStatus
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -17,5 +18,8 @@ data class CustomerModel(
     var name: String,
 
     @Column
-    var email: String
+    var email: String,
+
+    @Column
+    var status: CustomerStatus
 )
