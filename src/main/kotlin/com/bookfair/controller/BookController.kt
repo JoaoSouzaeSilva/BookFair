@@ -5,7 +5,6 @@ import com.bookfair.controller.request.PutBookRequest
 import com.bookfair.controller.response.BookResponse
 import com.bookfair.extension.toBookModel
 import com.bookfair.extension.toResponse
-import com.bookfair.model.BookModel
 import com.bookfair.service.BookService
 import com.bookfair.service.CustomerService
 import jakarta.validation.Valid
@@ -43,8 +42,8 @@ class BookController(
         bookService.findAll(pageable).map { it.toResponse() }
 
     @GetMapping("active")
-    fun findAllActives(@PageableDefault(page = 0, size = 10) pageable: Pageable): Page<BookModel> {
-        return bookService.findAllActive(pageable)
+    fun findAllActives(@PageableDefault(page = 0, size = 10) pageable: Pageable): Page<BookResponse> {
+        return bookService.findAllActive(pageable).map { it.toResponse() }
     }
 
     @GetMapping("{id}")

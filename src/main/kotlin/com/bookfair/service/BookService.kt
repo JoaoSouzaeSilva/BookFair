@@ -1,5 +1,6 @@
 package com.bookfair.service
 
+import com.bookfair.controller.response.BookResponse
 import com.bookfair.enums.BookStatus
 import com.bookfair.enums.Errors
 import com.bookfair.exception.NotFoundException
