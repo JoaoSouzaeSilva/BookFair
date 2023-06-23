@@ -1,6 +1,5 @@
 package com.bookfair.service
 
-import com.bookfair.controller.response.BookResponse
 import com.bookfair.enums.BookStatus
 import com.bookfair.enums.Errors
 import com.bookfair.exception.NotFoundException
@@ -52,6 +51,9 @@ class BookService(
         bookRepository.saveAll(books)
     }
 
+    fun findAllByIds(bookIds: Set<Int>): List<BookModel> {
+        return bookRepository.findAllById(bookIds).toList()
+    }
 
 
 }
