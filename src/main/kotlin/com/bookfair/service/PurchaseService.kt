@@ -25,8 +25,12 @@ class PurchaseService(
         purchaseRepository.save(purchaseModel)
     }
 
-//    fun getAll(pageable: Pageable): Page<PurchaseModel> {
-//        return purchaseRepository.findAll(pageable)
-//    }
+    fun getAll(pageable: Pageable): Page<PurchaseModel> {
+        return purchaseRepository.findAll(pageable)
+    }
+
+    fun getAllFromCustomer(customerId: Int): List<PurchaseModel> {
+        return purchaseRepository.findAllByCustomerId(customerId)
+    }
 
 }

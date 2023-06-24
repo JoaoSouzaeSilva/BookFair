@@ -6,10 +6,12 @@ import com.bookfair.controller.request.PutBookRequest
 import com.bookfair.controller.request.PutCustomerRequest
 import com.bookfair.controller.response.BookResponse
 import com.bookfair.controller.response.CustomerResponse
+import com.bookfair.controller.response.PurchaseResponse
 import com.bookfair.enums.BookStatus
 import com.bookfair.enums.CustomerStatus
 import com.bookfair.model.BookModel
 import com.bookfair.model.CustomerModel
+import com.bookfair.model.PurchaseModel
 
 fun PostCustomerRequest.toCustomerModel(): CustomerModel {
     return CustomerModel(
@@ -63,5 +65,16 @@ fun BookModel.toResponse(): BookResponse {
         price = this.price,
         customer = this.customer,
         status = this.status
+    )
+}
+
+fun PurchaseModel.toResponse(): PurchaseResponse {
+    return PurchaseResponse(
+        id = this.id,
+        customer = this.customer,
+        books = this.books,
+        nfe = this.nfe,
+        price = this.price,
+        createdAt = this.createdAt
     )
 }
