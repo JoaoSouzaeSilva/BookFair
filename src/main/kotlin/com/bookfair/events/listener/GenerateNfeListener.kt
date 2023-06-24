@@ -1,5 +1,6 @@
-package com.bookfair.events
+package com.bookfair.events.listener
 
+import com.bookfair.events.PurchaseEvent
 import com.bookfair.service.PurchaseService
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
