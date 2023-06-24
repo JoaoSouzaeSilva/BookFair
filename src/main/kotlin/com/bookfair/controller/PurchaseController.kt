@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController
 class PurchaseController(
     private val purchaseService: PurchaseService,
     private val purchaseMapper: PurchaseMapper,
-    private val customerService: CustomerService
 ) {
 
     @PostMapping
