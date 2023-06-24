@@ -4,6 +4,8 @@ import com.bookfair.events.PurchaseEvent
 import com.bookfair.model.PurchaseModel
 import com.bookfair.repository.PurchaseRepository
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -22,5 +24,9 @@ class PurchaseService(
     fun update(purchaseModel: PurchaseModel) {
         purchaseRepository.save(purchaseModel)
     }
+
+//    fun getAll(pageable: Pageable): Page<PurchaseModel> {
+//        return purchaseRepository.findAll(pageable)
+//    }
 
 }
