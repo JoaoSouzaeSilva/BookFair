@@ -6,12 +6,14 @@ import com.bookfair.enums.Profile
 import com.bookfair.exception.NotFoundException
 import com.bookfair.model.CustomerModel
 import com.bookfair.repository.CustomerRepository
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class CustomerService(
     val customerRepository: CustomerRepository,
-    val bookService: BookService
+    val bookService: BookService,
+    private val bCrypt: BCryptPasswordEncoder
 ) {
 
     fun getAll(name: String?): List<CustomerModel> {
@@ -23,7 +25,8 @@ class CustomerService(
 
     fun createCustomer(customer: CustomerModel) {
         val customerCopy = customer.copy(
-            roles = setOf(Profile.CUSTOMER)
+            roles = setOf(Profile.CUSTOMER),
+            password = bCrypt.encode(customer.password)
         )
         customerRepository.save(customerCopy)
     }
