@@ -1,9 +1,4 @@
-server:
-  port: 8080
 spring:
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
   jpa:
     hibernate:
       ddl-auto: update
@@ -11,8 +6,9 @@ spring:
     url: jdbc:mysql://localhost:3306/bookfair?createDatabaseIfNotExist=true
     username: root
     password: .Bolha1000
-  flyway:
-    baseline-on-migrate: true
-    validate-on-migrate: false
   jackson:
     default-property-inclusion: non_null
+
+jwt:
+  secret: 2c57cf3a-c804-4dc5-8cd4-93b8d8581948
+  expiration: 999999
