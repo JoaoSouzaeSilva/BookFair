@@ -1,5 +1,6 @@
 package com.bookfair.config
 
+import com.bookfair.enums.Role
 import com.bookfair.repository.CustomerRepository
 import com.bookfair.security.AuthenticationFilter
 import com.bookfair.security.AuthorizationFilter
@@ -25,6 +26,10 @@ class SecurityConfig(
 
     private val PUBLIC_MATCHERS = arrayOf<String>()
 
+    private val ADMIN_MATCHERS = arrayOf<String>(
+        "/admin/**"
+    )
+
     private val PUBLIC_POST_MATCHERS = arrayOf(
         "/customer"
     )
@@ -38,6 +43,7 @@ class SecurityConfig(
         http.authorizeRequests()
             .antMatchers(*PUBLIC_MATCHERS).permitAll()
             .antMatchers(HttpMethod.POST, *PUBLIC_POST_MATCHERS).permitAll()
+            .antMatchers(*ADMIN_MATCHERS).hasAuthority(Role.ADMIN.description)
             .anyRequest().authenticated()
         http.addFilter(AuthenticationFilter(authenticationManager(), customerRepository, jwtUtil))
         http.addFilter(AuthorizationFilter(authenticationManager(), userDetails, jwtUtil))
