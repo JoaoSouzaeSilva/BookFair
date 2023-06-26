@@ -2,7 +2,7 @@ package com.bookfair.service
 
 import com.bookfair.enums.CustomerStatus
 import com.bookfair.enums.Errors
-import com.bookfair.enums.Profile
+import com.bookfair.enums.Role
 import com.bookfair.exception.NotFoundException
 import com.bookfair.model.CustomerModel
 import com.bookfair.repository.CustomerRepository
@@ -25,7 +25,7 @@ class CustomerService(
 
     fun createCustomer(customer: CustomerModel) {
         val customerCopy = customer.copy(
-            roles = setOf(Profile.CUSTOMER),
+            roles = setOf(Role.CUSTOMER),
             password = bCrypt.encode(customer.password)
         )
         customerRepository.save(customerCopy)

@@ -4,6 +4,7 @@ import com.bookfair.controller.request.LoginRequest
 import com.bookfair.exception.AuthenticationException
 import com.bookfair.repository.CustomerRepository
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.AuthenticationManager
@@ -17,7 +18,6 @@ class AuthenticationFilter(
 ): UsernamePasswordAuthenticationFilter(authenticationManager) {
 
     override fun attemptAuthentication(request: HttpServletRequest, response: HttpServletResponse): Authentication {
-
         try {
             val loginRequest = jacksonObjectMapper().readValue(request.inputStream, LoginRequest::class.java)
             val id = customerRepository.findByEmail(loginRequest.email)
@@ -27,6 +27,19 @@ class AuthenticationFilter(
         } catch (ex: Exception) {
             throw AuthenticationException("Error while authenticating", "999")
         }
+    }
+
+    override fun successfulAuthentication(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        chain: FilterChain,
+        authResult: Authentication
+    ) {
+
+        val id = ( authResult.principal as UserCustomDetails).id
+
+        response.addHeader("Authorization", "123456")
+
     }
 
 }
