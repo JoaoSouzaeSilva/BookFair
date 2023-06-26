@@ -29,7 +29,7 @@ class CustomerController(
     }
 
     @GetMapping("{id}")
-    @PreAuthorize("#id == authentication.principal.id")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || #id == authentication.principal.id")
     fun getCustomer(@PathVariable id: Int): CustomerResponse {
         return customerService.findById(id).toResponse()
     }
