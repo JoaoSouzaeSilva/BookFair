@@ -2,6 +2,7 @@ package com.bookfair.config
 
 import com.bookfair.repository.CustomerRepository
 import com.bookfair.security.AuthenticationFilter
+import com.bookfair.security.AuthorizationFilter
 import com.bookfair.security.JwtUtil
 import com.bookfair.service.UserDetailsCustomService
 import org.springframework.context.annotation.Bean
@@ -37,8 +38,9 @@ class SecurityConfig(
         http.authorizeRequests()
             .antMatchers(*PUBLIC_MATCHERS).permitAll()
             .antMatchers(HttpMethod.POST, *PUBLIC_POST_MATCHERS).permitAll()
-            .anyRequest().permitAll()
+            .anyRequest().authenticated()
         http.addFilter(AuthenticationFilter(authenticationManager(), customerRepository, jwtUtil))
+        http.addFilter(AuthorizationFilter(authenticationManager(), userDetails, jwtUtil))
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
     }
 
