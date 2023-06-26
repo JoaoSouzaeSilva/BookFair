@@ -5,6 +5,7 @@ import com.bookfair.controller.request.PutCustomerRequest
 import com.bookfair.controller.response.CustomerResponse
 import com.bookfair.extension.toCustomerModel
 import com.bookfair.extension.toResponse
+import com.bookfair.security.CustomerCanOnlyAccessOwnResource
 import com.bookfair.service.CustomerService
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize
@@ -29,7 +30,7 @@ class CustomerController(
     }
 
     @GetMapping("{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') || #id == authentication.principal.id")
+    @CustomerCanOnlyAccessOwnResource
     fun getCustomer(@PathVariable id: Int): CustomerResponse {
         return customerService.findById(id).toResponse()
     }
