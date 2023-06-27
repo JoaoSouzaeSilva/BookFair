@@ -170,7 +170,6 @@ class CustomerServiceTest {
     fun `should throw not found exception when delete customer`() {
         val fakeId = Random().nextInt()
         val fakeCustomer = buildCustomer(id = fakeId)
-        val expectedCustomer = fakeCustomer.copy(status = CustomerStatus.INACTIVE)
 
         every { customerService.findById(fakeId) } throws NotFoundException(Errors.ML201.message.format(fakeId), Errors.ML201.code)
 
@@ -192,7 +191,22 @@ class CustomerServiceTest {
 
         every { customerRepository.existsByEmail(email) } returns false
 
-        customerService.emailAvailable(email)
+        val emailAvailable = customerService.emailAvailable(email)
+
+        assertTrue(emailAvailable)
+        verify(exactly = 1) { customerRepository.existsByEmail(email) }
+    }
+
+    @Test
+    fun `should return false when email not available`() {
+        val email = "${Random().nextInt().toString()}@gmail.com"
+
+        every { customerRepository.existsByEmail(email) } returns true
+
+        val emailAvailable = customerService.emailAvailable(email)
+
+        assertFalse(emailAvailable)
+        verify(exactly = 1) { customerRepository.existsByEmail(email) }
     }
 
     private fun buildCustomer(
