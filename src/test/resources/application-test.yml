@@ -1,7 +1,11 @@
 
 spring:
   profiles:
-    active: dev
+    active: test
+  datasource:
+    url: jdbc:mysql://localhost:3306/bookfairtest?createDatabaseIfNotExist=true
+    username: root
+    password: .Bolha1000
   jpa:
     hibernate:
       ddl-auto: update

@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/bookfair?createDatabaseIfNotExist=true
+    username: root
+    password: .Bolha1000
+
