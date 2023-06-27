@@ -96,7 +96,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    fun `should return error when user not found by id`() {
+    fun `should throw not found when no customer with id`() {
         val fakeId = Random().nextInt()
 
         every { customerRepository.findById(fakeId) } returns Optional.empty()
@@ -108,6 +108,39 @@ class CustomerServiceTest {
         assertEquals("Customer [$fakeId] not exists", error.message)
         assertEquals("ML-201", error.errorCode)
         verify(exactly = 1) { customerRepository.findById(fakeId) }
+    }
+
+    @Test
+    fun `should update customer`() {
+        val fakeId = Random().nextInt()
+        val fakeCustomer = buildCustomer(id = fakeId)
+
+        every { customerRepository.existsById(fakeId) } returns true
+        every { customerRepository.save(fakeCustomer) } returns fakeCustomer
+
+        customerService.update(fakeCustomer)
+
+        verify(exactly = 1) { customerRepository.existsById(fakeId) }
+        verify(exactly = 1) { customerRepository.save(fakeCustomer) }
+    }
+
+    @Test
+    fun `should throw not found when update customer`() {
+        val fakeId = Random().nextInt()
+        val fakeCustomer = buildCustomer(id = fakeId)
+
+        every { customerRepository.existsById(fakeId) } returns false
+        every { customerRepository.save(fakeCustomer) } returns fakeCustomer
+
+        val error = assertThrows<NotFoundException> {
+            customerService.update(fakeCustomer)
+        }
+
+        assertEquals("Customer [$fakeId] not exists", error.message)
+        assertEquals("ML-201", error.errorCode)
+
+        verify(exactly = 1) { customerRepository.existsById(fakeId) }
+        verify(exactly = 0) { customerRepository.save(any()) }
     }
 
     private fun buildCustomer(
