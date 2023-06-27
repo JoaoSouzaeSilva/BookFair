@@ -96,7 +96,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    fun `should return error when user not found`() {
+    fun `should return error when user not found by id`() {
         val fakeId = Random().nextInt()
 
         every { customerRepository.findById(fakeId) } returns Optional.empty()
