@@ -1,6 +1,7 @@
 package com.mercadolivro.repository
 
 import com.mercadolivro.helper.buildCustomer
+import io.mockk.every
 import io.mockk.junit5.MockKExtension
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -54,7 +55,29 @@ class CustomerRepositoryTest {
 
             assertFalse(exists)
         }
+    }
 
+    @Nested
+    inner class `find by email` {
+        @Test
+        fun `should return customer when email exists`() {
+            val email = "email@teste.com"
+            val customer = customerRepository.save(buildCustomer(email = email))
+
+            val result = customerRepository.findByEmail(email)
+
+            assertNotNull(result)
+            assertEquals(customer, result)
+        }
+
+        @Test
+        fun `should return null when email does not exist`() {
+            val email = "nonexistingemail@teste.com"
+
+            val result = customerRepository.findByEmail(email)
+
+            assertNull(result)
+        }
     }
 
 }
