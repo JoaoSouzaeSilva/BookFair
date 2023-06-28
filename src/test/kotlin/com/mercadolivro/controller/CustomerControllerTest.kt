@@ -1,6 +1,7 @@
 package com.mercadolivro.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.mercadolivro.controller.request.PostCustomerRequest
 import com.mercadolivro.helper.buildCustomer
 import com.mercadolivro.repository.CustomerRepository
 import org.junit.jupiter.api.AfterEach
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
@@ -73,5 +75,17 @@ class CustomerControllerTest {
             .andExpect(jsonPath("$[0].status").value(customer1.status.name))
     }
 
+    @Test
+    fun `should create customer`() {
+        val request = PostCustomerRequest("fake name", "email@fake.com", "12345")
+        mockMvc.perform(post("/customers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isCreated)
 
+        val customers = customerRepository.findAll().toList()
+        assertEquals(1, customers.size)
+        assertEquals(request.name, customers[0].name)
+        assertEquals(request.email, customers[0].email)
+    }
 }
