@@ -1,7 +1,5 @@
-
 spring:
-  profiles:
-    active: test
+
   datasource:
     url: jdbc:mysql://localhost:3306/bookfairtest?createDatabaseIfNotExist=true
     username: root
