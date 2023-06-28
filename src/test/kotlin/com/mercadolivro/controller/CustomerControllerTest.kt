@@ -8,6 +8,7 @@ import com.mercadolivro.security.UserCustomDetails
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -91,28 +92,33 @@ class CustomerControllerTest {
         assertEquals(request.email, customers[0].email)
     }
 
-    @Test
-    fun `should get customer by id when customer has the same id`() {
-        val customer = customerRepository.save(buildCustomer())
+    @Nested
+    inner class `get customer by id` {
 
-        mockMvc.perform(get("/customers/${customer.id}")
+        @Test
+        fun `should get customer by id when customer has the same id`() {
+            val customer = customerRepository.save(buildCustomer())
+
+            mockMvc.perform(get("/customers/${customer.id}")
                 .with(user(UserCustomDetails(customer))))
-            .andExpect(status().isOk)
-            .andExpect(jsonPath("$.id").value(customer.id))
-            .andExpect(jsonPath("$.name").value(customer.name))
-            .andExpect(jsonPath("$.email").value(customer.email))
-            .andExpect(jsonPath("$.status").value(customer.status.name))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.id").value(customer.id))
+                .andExpect(jsonPath("$.name").value(customer.name))
+                .andExpect(jsonPath("$.email").value(customer.email))
+                .andExpect(jsonPath("$.status").value(customer.status.name))
 
-    }
+        }
 
-    @Test
-    fun `should return forbidden when customer does not have the same id`() {
-        val customer = customerRepository.save(buildCustomer())
+        @Test
+        fun `should return forbidden when customer does not have the same id`() {
+            val customer = customerRepository.save(buildCustomer())
 
-        mockMvc.perform(get("/customers/0").with(user(UserCustomDetails(customer))))
-            .andExpect(status().isForbidden)
-            .andExpect(jsonPath("$.httpCode").value(403))
-            .andExpect(jsonPath("$.message").value("Access Denied"))
-            .andExpect(jsonPath("$.internalCode").value("ML-000"))
+            mockMvc.perform(get("/customers/0").with(user(UserCustomDetails(customer))))
+                .andExpect(status().isForbidden)
+                .andExpect(jsonPath("$.httpCode").value(403))
+                .andExpect(jsonPath("$.message").value("Access Denied"))
+                .andExpect(jsonPath("$.internalCode").value("ML-000"))
+        }
+
     }
 }
