@@ -120,5 +120,17 @@ class CustomerControllerTest {
                 .andExpect(jsonPath("$.internalCode").value("ML-000"))
         }
 
+        @Test
+        @WithMockUser(roles=["ADMIN"])
+        fun `should get customer by id when user is admin`() {
+            val customer = customerRepository.save(buildCustomer())
+
+            mockMvc.perform(get("/customers/${customer.id}"))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.id").value(customer.id))
+                .andExpect(jsonPath("$.name").value(customer.name))
+                .andExpect(jsonPath("$.email").value(customer.email))
+                .andExpect(jsonPath("$.status").value(customer.status.name))
+        }
     }
 }
