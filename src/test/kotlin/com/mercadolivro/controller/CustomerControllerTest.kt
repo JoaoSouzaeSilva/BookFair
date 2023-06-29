@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.util.UUID
+import kotlin.random.Random
 
 
 @SpringBootTest
@@ -93,6 +94,19 @@ class CustomerControllerTest {
         assertEquals(request.email, customers[0].email)
     }
 
+    @Test
+    fun `should throw error when create customer has invalid information`() {
+        val request = PostCustomerRequest("", "${Random.nextInt()}@gmail.com", "12345")
+
+        mockMvc.perform(post("/customers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isUnprocessableEntity)
+            .andExpect(jsonPath("$.httpCode").value(422))
+            .andExpect(jsonPath("$.message").value("Invalid Request"))
+            .andExpect(jsonPath("$.internalCode").value("ML-001"))
+    }
+
     @Nested
     inner class `get customer by id` {
 
@@ -107,7 +121,6 @@ class CustomerControllerTest {
                 .andExpect(jsonPath("$.name").value(customer.name))
                 .andExpect(jsonPath("$.email").value(customer.email))
                 .andExpect(jsonPath("$.status").value(customer.status.name))
-
         }
 
         @Test
@@ -156,18 +169,17 @@ class CustomerControllerTest {
 
         @Test
         fun `should throw error when update customer has invalid information`() {
-            val customer = customerRepository.save(buildCustomer())
-            val request = PutCustomerRequest("João", "emailupdate@gmail.com")
+            val request = PutCustomerRequest("", "emailupdate@gmail.com")
 
-            mockMvc.perform(put("/customers/${customer.id}")
+            mockMvc.perform(put("/customers/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isNoContent)
-
-            val customers = customerRepository.findAll().toList()
-            assertEquals(1, customers.size)
-            assertEquals(request.name, customers[0].name)
-            assertEquals(request.email, customers[0].email)
+                .andExpect(status().isUnprocessableEntity)
+                .andExpect(jsonPath("$.httpCode").value(422))
+                .andExpect(jsonPath("$.message").value("Invalid Request"))
+                .andExpect(jsonPath("$.internalCode").value("ML-001"))
         }
     }
+
+
 }
