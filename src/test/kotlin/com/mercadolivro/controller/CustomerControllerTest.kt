@@ -3,6 +3,7 @@ package com.mercadolivro.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mercadolivro.controller.request.PostCustomerRequest
 import com.mercadolivro.controller.request.PutCustomerRequest
+import com.mercadolivro.enums.CustomerStatus
 import com.mercadolivro.helper.buildCustomer
 import com.mercadolivro.repository.CustomerRepository
 import com.mercadolivro.security.UserCustomDetails
@@ -171,7 +172,8 @@ class CustomerControllerTest {
         fun `should throw error when update customer has invalid information`() {
             val request = PutCustomerRequest("", "emailupdate@gmail.com")
 
-            mockMvc.perform(put("/customers/1")
+            mockMvc.perform(
+                put("/customers/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isUnprocessableEntity)
@@ -181,5 +183,20 @@ class CustomerControllerTest {
         }
     }
 
+    @Nested
+    inner class `delete customer by id` {
 
+        @Test
+        fun `should delete customer`() {
+            val customer = customerRepository.save(buildCustomer())
+
+            mockMvc.perform(
+                delete("/customers/${customer.id}")
+                    .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent)
+
+            val customerDeleted = customerRepository.findById(customer.id!!)
+            assertEquals(CustomerStatus.INACTIVE, customerDeleted.get().status)
+        }
+    }
 }
