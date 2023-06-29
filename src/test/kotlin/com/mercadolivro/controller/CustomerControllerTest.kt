@@ -181,6 +181,20 @@ class CustomerControllerTest {
                 .andExpect(jsonPath("$.message").value("Invalid Request"))
                 .andExpect(jsonPath("$.internalCode").value("ML-001"))
         }
+
+        @Test
+        fun `should throw error trying to update customer that does not exist`() {
+            val request = PutCustomerRequest("João", "emailupdate@gmail.com")
+
+            mockMvc.perform(
+                put("/customers/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound)
+                .andExpect(jsonPath("$.httpCode").value(404))
+                .andExpect(jsonPath("$.message").value("Customer [1] not exists"))
+                .andExpect(jsonPath("$.internalCode").value("ML-201"))
+        }
     }
 
     @Nested
