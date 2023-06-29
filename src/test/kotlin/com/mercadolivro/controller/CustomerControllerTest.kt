@@ -2,6 +2,7 @@ package com.mercadolivro.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.mercadolivro.controller.request.PostCustomerRequest
+import com.mercadolivro.controller.request.PutCustomerRequest
 import com.mercadolivro.helper.buildCustomer
 import com.mercadolivro.repository.CustomerRepository
 import com.mercadolivro.security.UserCustomDetails
@@ -67,7 +68,7 @@ class CustomerControllerTest {
     @Test
     fun `should return all customers by name when get all`() {
         val customer1 = customerRepository.save(buildCustomer(name = "João"))
-        val customer2 = customerRepository.save(buildCustomer(name = "Debi"))
+        customerRepository.save(buildCustomer(name = "Debi"))
 
         mockMvc.perform(get("/customers?name=Jo"))
             .andExpect(status().isOk)
@@ -131,6 +132,42 @@ class CustomerControllerTest {
                 .andExpect(jsonPath("$.name").value(customer.name))
                 .andExpect(jsonPath("$.email").value(customer.email))
                 .andExpect(jsonPath("$.status").value(customer.status.name))
+        }
+    }
+
+    @Nested
+    inner class `update customer by id` {
+
+        @Test
+        fun `should update customer`() {
+            val customer = customerRepository.save(buildCustomer())
+            val request = PutCustomerRequest("João", "emailupdate@gmail.com")
+
+            mockMvc.perform(put("/customers/${customer.id}")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNoContent)
+
+            val customers = customerRepository.findAll().toList()
+            assertEquals(1, customers.size)
+            assertEquals(request.name, customers[0].name)
+            assertEquals(request.email, customers[0].email)
+        }
+
+        @Test
+        fun `should throw error when update customer has invalid information`() {
+            val customer = customerRepository.save(buildCustomer())
+            val request = PutCustomerRequest("João", "emailupdate@gmail.com")
+
+            mockMvc.perform(put("/customers/${customer.id}")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNoContent)
+
+            val customers = customerRepository.findAll().toList()
+            assertEquals(1, customers.size)
+            assertEquals(request.name, customers[0].name)
+            assertEquals(request.email, customers[0].email)
         }
     }
 }
