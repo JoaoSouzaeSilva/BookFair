@@ -198,5 +198,17 @@ class CustomerControllerTest {
             val customerDeleted = customerRepository.findById(customer.id!!)
             assertEquals(CustomerStatus.INACTIVE, customerDeleted.get().status)
         }
+
+        @Test
+        fun `should throw error when customer to delete does not exist`() {
+
+            mockMvc.perform(
+                delete("/customers/1")
+                    .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound)
+                .andExpect(jsonPath("$.httpCode").value(404))
+                .andExpect(jsonPath("$.message").value("Customer [1] not exists"))
+                .andExpect(jsonPath("$.internalCode").value("ML-201"))
+        }
     }
 }
